@@ -1,9 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from pprint import pprint
 
 
 class Graph():
-    def __init__(self, number_of_vertices:int, edges:list=None) -> None:
+    def __init__(self, number_of_vertices:int, edges:list=None):
+        '''
+        The Graph object has two main attributes:
+            number of vertices on one side - `number_of_vertices`:int (greater than 1);
+            edges - `edges`:list 
+                edges list contains tuples (at least one) with two numbers:int (from 0 to `number_of_vertices`-1))
+                1st number is a vertex from 1st set (left one) and 2nd number is a vertex from 2nd set (right one)
+        '''
 
         if not isinstance(number_of_vertices, int):
             raise Exception(f"`number_of_vertices` must be of type int, now it is {type(number_of_vertices)}.")
@@ -16,6 +24,11 @@ class Graph():
 
         
     def set_edges(self, edges:list) -> None:
+        '''
+        Validates `edges` and adds `self.EDGES` and `self.DETAILED_EDGES_INFO`
+
+        Returns None.
+        '''
 
         self.EDGES = None
         self.DETAILED_EDGES_INFO = None
@@ -36,19 +49,27 @@ class Graph():
                 are_good_number = all(isinstance(item, int) and item >= 0 and item <= self.NUMBER_OF_VERTICES-1 for item in indexes)
 
                 if are_good_number:
-                    self.EDGES = edges
+                    self.EDGES = list(set(edges))
                 else:
                     raise Exception(f"Vertices indexes in `edges` must be from 0 to {self.NUMBER_OF_VERTICES-1} including.")
 
             else:
                 raise Exception(f"All elements of `edges` must be tuple with 2 elements.")
             
-        self.add_detailed_edges_info()
+        self.DETAILED_EDGES_INFO = self.add_detailed_edges_info()
 
             
             
 
-    def add_detailed_edges_info(self) -> dict:
+    def add_detailed_edges_info(self) -> list:
+        '''
+        Returns list of dictionaries with detailed info about every edge:
+            - "vertices":tuple - vertices the edge connects;
+            - "line_coefs":tuple - coefficients of the line going through the vertices;
+            - "intersection_points":list - points (x,y) the edge intersects with other edges;
+            - "intersection_vertices":list - edges mentioned in "intersection_points" description.
+        '''
+
         if self.EDGES is None:
             raise Exception(f"Method `add_detailed_edges_inf` should be used only if `self.EDGES` is not None.")
 
@@ -89,46 +110,62 @@ class Graph():
                         edge_1["intersection_points"].append(intersection_point)
                         edge_1["intersection_vertices"].append(edge_0["vertices"])
 
-        self.DETAILED_EDGES_INFO = detailed_edges_info
         return detailed_edges_info
-    
 
 
+    # draw section
     def draw(self, edges:bool=True, intersections:bool=False) -> plt:
+        '''
+        Draws the graph using matplotlib.
+
+        Returns the figure:plt.
+        '''
         n = self.NUMBER_OF_VERTICES
 
         fig = plt.figure(figsize=(8, 8))
         ax = fig.add_subplot()
-        ax.grid()
+        # ax.grid()
+
+        points = [i for i in range(n)]
+
+        ax.scatter(x=[0 for i in range(n)], y=points, color="royalblue", s=50, zorder=99)
+        ax.scatter(x=[n-1 for i in range(n)], y=points, color="royalblue", s=50, zorder=99)
 
         if edges and not (self.EDGES is None):
             self.add_edges_to_draw(ax)
         if intersections and not (self.DETAILED_EDGES_INFO is None):
             self.add_intersections_to_draw(ax)
 
-        points = [i for i in range(n)]
-
-        ax.scatter(x = [0 for i in range(n)], y = points, color = "blue", s = 50)
-        ax.scatter(x = [n-1 for i in range(n)], y = points, color = "green", s = 50)
         
         return plt
     
+
     
     def add_edges_to_draw(self, ax) -> None:
+        '''
+        Adds edges to axes.
+        
+        Returns None.
+        '''
+
         for edge in self.EDGES:
             x = [0, self.NUMBER_OF_VERTICES-1]
             y = [edge[0], edge[1]]
-            ax.plot(x, y, color = "orange")
+            ax.plot(x, y, color="goldenrod", zorder=25)
+
+
 
     def add_intersections_to_draw(self, ax) -> None:
+        '''
+        Adds intersection points to axes.
+        
+        Returns None.
+        '''
 
         edges = self.DETAILED_EDGES_INFO
         
         intersection_points = [item for edge in edges for item in edge["intersection_points"]]
-        temp_int_points = []
-        [temp_int_points.append(x) for x in intersection_points if x not in temp_int_points]
+        intersection_points = set(intersection_points)
 
-        ax.scatter(*zip(*intersection_points), color="black")
+        ax.scatter(*zip(*intersection_points), color="black", zorder=75)
         
-
-    
