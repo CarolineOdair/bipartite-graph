@@ -19,6 +19,7 @@ class Edge():
         
         self.end_points = [x, y]
 
+
     def __repr__(self):  
         return f"{self.end_points}"
 
@@ -28,11 +29,27 @@ class Edge():
             return self.end_points[i]
         raise Exception(f"`i` must be int equal to 0 or 1, now i is {type(i)} equal to {i}.")
     
-    def __eq__(self, edge):
-        if self.end_points == edge.end_points:
+
+    def __eq__(self, edge_2):
+        if self.end_points == edge_2.end_points:
             return True 
         return False
     
+    
+    def __abs__(self) -> float:
+        '''
+        Returns the length of self in as float.
+        '''
+        vect = self.to_vector(self)
+
+        return (vect.x**2 + vect.y**2)**0.5
+    
+    def to_vector(self) -> Point:
+
+        return Point(self.end_points[1].x - self.end_points[0].x, self.end_points[1].y - self.end_points[0].y)
+    
+
+
 class OuterEdge(Edge):
     TYPE = EdgeType.OUTER
 

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from pprint import pprint
 from point import Point, VertexPoint, IntersectionPoint
 from edge import Edge, InnerEdge, OuterEdge, PolygonalEdge
+from edge_utils import cross_prod, angle_between_edges
 
 
 class Graph():

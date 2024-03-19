@@ -36,6 +36,15 @@ class Point():
             return True 
         return False
     
+    def __abs__(self) -> float:
+        '''
+        Returns the length of self in as float.
+        '''
+        return (self.x**2 + self.y**2)**0.5
+    
+    def to_vector(self):
+        return self
+    
     
 
 class VertexPoint(Point):
