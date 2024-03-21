@@ -1,5 +1,3 @@
-import numpy as np
-
 class PointType:
     VERTEX = "vertex"
     INTERSECTION = "intersection"
@@ -36,11 +34,17 @@ class Point():
             return True 
         return False
     
+    def __neq__(self, point_2):
+        return not self == point_2
+    
     def __abs__(self) -> float:
         '''
         Returns the length of self in as float.
         '''
         return (self.x**2 + self.y**2)**0.5
+    
+    def __hash__(self):
+        return hash(str(self))
     
     def to_vector(self):
         return self

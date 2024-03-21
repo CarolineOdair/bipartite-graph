@@ -1,4 +1,3 @@
-import numpy as np
 from point import Point
 
 class EdgeType:
@@ -35,6 +34,9 @@ class Edge():
             return True 
         return False
     
+    def __neq__(self, point_2):
+        return not self == point_2
+    
     
     def __abs__(self) -> float:
         '''
@@ -44,17 +46,13 @@ class Edge():
 
         return (vect.x**2 + vect.y**2)**0.5
     
+    def __hash__(self):
+        return hash(str(self))
+    
     def to_vector(self) -> Point:
 
         return Point(self.end_points[1].x - self.end_points[0].x, self.end_points[1].y - self.end_points[0].y)
     
-
-
-class OuterEdge(Edge):
-    TYPE = EdgeType.OUTER
-
-class InnerEdge(Edge):
-    TYPE = EdgeType.INNER
-
-class PolygonalEdge(InnerEdge):
-    TYPE = EdgeType.POLYGONAL
+    def reversed_edge(self):
+        return Edge(self.end_points[1], self.end_points[0])
+    

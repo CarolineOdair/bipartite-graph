@@ -32,7 +32,7 @@ def angle_between_edges(edge_1:Edge, edge_2:Edge) -> float:
     Using formula <a, b> = |a| * |b| * cos(phi)
     calculate phi value - angle between edges a and b.
 
-    Takes two Edge objects and returns float representing the angle from 0 to 2 pi.
+    Takes two Edge objects and returns float representing the angle from 0 to pi.
     '''
 
     validate_if_all_edge(edge_1, edge_2)
@@ -41,10 +41,8 @@ def angle_between_edges(edge_1:Edge, edge_2:Edge) -> float:
     edge_2 = edge_2.to_vector()
 
     cos_value = inner_prod(edge_1, edge_2) / (abs(edge_1) * abs(edge_2))  
-    # I assume cos_value is between -1 and 1 as math.acos expects.
-    # Needs to be rethought is it's true
 
-    return acos(cos_value)
+    return acos(round(cos_value, 2))
     
 
 def validate_if_all_edge(*args) -> None:
