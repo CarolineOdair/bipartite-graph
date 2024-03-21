@@ -4,6 +4,7 @@ from point import Point, VertexPoint, IntersectionPoint
 from edge import Edge
 from polygon import Poly
 from edge_utils import cross_prod, angle_between_edges
+import settings
 
 
 class Graph():
@@ -429,8 +430,8 @@ class Graph():
 
         points = [i for i in range(n)]
 
-        ax.scatter(x=[0 for i in range(n)], y=points, color="orangered", s=50, zorder=99)
-        ax.scatter(x=[n-1 for i in range(n)], y=points, color="orangered", s=50, zorder=99)
+        ax.scatter(x=[0 for i in range(n)], y=points, **settings.right_side_points)
+        ax.scatter(x=[n-1 for i in range(n)], y=points, **settings.left_side_points)
 
         if edges and not (self.edges is None):
             self.add_edges_to_draw(ax)
@@ -456,7 +457,7 @@ class Graph():
         for edge in self.edges:
             x = [0, self.NUM_OF_VERTS-1]
             y = [edge.end_points[0].y, edge.end_points[1].y]
-            ax.plot(x, y, color="black", zorder=25)
+            ax.plot(x, y, **settings.graph_edges_lines)
 
 
     def add_intersections_to_draw(self, ax) -> None:
@@ -473,20 +474,21 @@ class Graph():
             x.append(point.x)
             y.append(point.y)
 
-        ax.scatter(x, y, color="gold", zorder=75)
+
+        ax.scatter(x, y, **settings.intersection_points)
 
     def add_polygons_to_draw(self, ax):
-        odd_levels_polys = [poly for level in self.graph_levels for poly in level.get("polygons") if level.get("level") % 2 == 0]
-        even_levels_polys = [poly for level in self.graph_levels for poly in level.get("polygons") if level.get("level") % 2 == 1]
+        odd_levels_polys = [poly for level in self.graph_levels for poly in level.get("polygons") if level.get("level") % 2 == 1]
+        even_levels_polys = [poly for level in self.graph_levels for poly in level.get("polygons") if level.get("level") % 2 == 0]
 
-        for poly in odd_levels_polys:
-            X = np.array([list(point.coords) for point in poly.verts])
-            t1 = plt.Polygon(X, color="slategray", zorder=10)
-            plt.gca().add_patch(t1)
-        
         for poly in even_levels_polys:
             X = np.array([list(point.coords) for point in poly.verts])
-            t1 = plt.Polygon(X, color="skyblue", zorder=10)
+            t1 = plt.Polygon(X, **settings.first_level_polygons)
+            plt.gca().add_patch(t1)
+            
+        for poly in odd_levels_polys:
+            X = np.array([list(point.coords) for point in poly.verts])
+            t1 = plt.Polygon(X, **settings.second_level_polygons)
             plt.gca().add_patch(t1)
         
     def add_frame_to_draw(self, ax):
@@ -494,5 +496,5 @@ class Graph():
         n = self.NUM_OF_VERTS
         x = [0, 0, n-1, n-1, 0]
         y = [0, n-1, n-1, 0, 0]
-        ax.plot(x, y, color="black", zorder=25, linewidth=2)
+        ax.plot(x, y, **settings.frame_lines)
         
