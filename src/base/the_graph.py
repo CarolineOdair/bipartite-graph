@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from typing import Union, Tuple
 
 import settings
 
@@ -440,7 +441,7 @@ class Graph():
         return graph_levels
 
 
-    def if_continue_level_searching(self, graph_lever_upper_boundary_polygons:list):
+    def if_continue_level_searching(self, graph_lever_upper_boundary_polygons:list) -> bool:
         '''
         Checks if searching should be continued - if no upper (inner) boundary, no.
 
@@ -566,7 +567,7 @@ class Graph():
     
 
     # calculating area section
-    def get_area_of_polys(self) -> tuple:
+    def get_area_of_polys(self) -> Tuple[float, float]:
         '''
         Calculates the area of polys in odd and even levels.
 
@@ -603,7 +604,7 @@ class Graph():
         return self.get_area_of_given_polys(polys_to_calc)
 
 
-    def get_area_of_given_polys(self, polys) -> float:
+    def get_area_of_given_polys(self, polys:list) -> float:
         '''
         Calculates area of polys given in a list.
 
@@ -619,41 +620,10 @@ class Graph():
         polys_area = 0
 
         for poly in polys:
-            polys_area += self.get_area_of_poly(poly)
+            polys_area += poly.get_area()
         
         return polys_area
-
-
-    def get_area_of_poly(self, poly:Poly) -> float:
-        '''
-        Calculates area of the given polygon using shoelace formula:
-        https://en.wikipedia.org/wiki/Shoelace_formula
-        
-        Takes poly:Polygon.
-
-        Returns the area:float.
-        '''
-        if not isinstance(poly, Poly):
-            raise Exception(f"`poly` must be of type Poly, not it's {type(poly)}.")
-
-        area = 0
-
-        num_of_verts = len(poly.verts)
-        for i in range(num_of_verts):
-            j = i + 1
-
-            if i == num_of_verts-1:
-                j = 0
-
-            x_1 = poly[i].x
-            y_1 = poly[i].y
-            x_2 = poly[j].x
-            y_2 = poly[j].y
-
-            area += x_1*y_2 - x_2*y_1
-
-        return abs(area)/2
-
+    
 
     def check_if_sums_up_to_square(self, area_1:float, area_2:float, error_val:float=0.001) -> bool:
         '''
@@ -741,7 +711,7 @@ class Graph():
         ax.scatter(x, y, **settings.intersection_points)
 
 
-    def add_polygons_to_draw(self):
+    def add_polygons_to_draw(self) -> None:
         '''
         Adds colored polygons to plt.
         
@@ -762,7 +732,7 @@ class Graph():
             plt.gca().add_patch(t1)
         
 
-    def add_frame_to_draw(self, ax):
+    def add_frame_to_draw(self, ax) -> None:
         '''
         Adds fame to axes.
         
@@ -776,7 +746,7 @@ class Graph():
 
 
     # graph utils section
-    def get_odd_or_even_levels_polys(self, mode:str="both"):
+    def get_odd_or_even_levels_polys(self, mode:str="both") -> list:
         '''
         Returns all polygons in a given levels: odd, even or both.
 
@@ -796,7 +766,8 @@ class Graph():
             
         return [poly for level in self.graph_levels for poly in level.get("polygons")]
     
-    def is_a_corner(self, point:Point, mode:str="both"):
+
+    def is_a_corner(self, point:Point, mode:str="both") -> bool:
         '''
         Checks if given point is a corner point.
 

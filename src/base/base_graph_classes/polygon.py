@@ -4,7 +4,13 @@ from base.base_graph_classes.point import Point
 
 
 class Poly():
-
+    '''
+    Polygon is represented by its vertices.
+    
+    Polygon exists inside the graph, so some info about the Poly is actually info about the graph,
+    i.e. an edge of the Poly can be inner or outer edge (of the graph).  
+    '''
+        
     def __init__(self, n:int, *args):
 
         if all([not isinstance(arg, Point) for arg in args]):
@@ -18,31 +24,37 @@ class Poly():
 
         self.manage_edges_types(n)
     
-    def __repr__(self):  
+
+    def __repr__(self) -> str:  
         return f"{self.verts}"
     
-    def __eq__(self, poly_2):
+
+    def __eq__(self, poly_2) -> bool:
 
         if set(self.verts) == set(poly_2.verts):
             return True 
         return False
 
-    def __hash__(self):
+
+    def __hash__(self) -> int:
         return hash(str(self))
     
+
     def __getitem__(self, i:int) -> Point:
         try:
             return self.verts[i]
         except:
             raise Exception(f"`i` must be int from 0 to {len(self.verts)-1}, now i is {type(i)} equal to {i}.")
-        
-    # def get_polygon_without_duplicated_points(self):
-    #     new_verts = []
-    #     # new_verts = [vert for vert in self.verts if vert not in new_verts] 
-    #     return Poly(self.n, *new_verts)
 
 
-    def manage_edges_types(self, n):
+    def manage_edges_types(self, n:int) -> None:
+        '''
+        Adds edges to polygon. Divides edges to inner and outer of the graph.
+
+        Takes n:int - number of edges in the graph.
+
+        Returns None.
+        '''
 
         up_edge_points = [Point(0, n-1), Point(n-1, n-1)]
         down_edge_points = [Point(0, 0), Point(n-1,0)]
@@ -69,3 +81,30 @@ class Poly():
                 self.outer_edges.append(edge)
             else:
                 self.inner_edges.append(edge)
+
+
+    def get_area(self) -> float:
+        '''
+        Calculates area of the polygon using shoelace formula:
+        https://en.wikipedia.org/wiki/Shoelace_formula
+
+        Returns the area:float.
+        '''
+
+        area_times_2 = 0
+
+        num_of_verts = len(self.verts)
+        for i in range(num_of_verts):
+            j = i + 1
+
+            if i == num_of_verts-1:
+                j = 0
+
+            x_1 = self[i].x
+            y_1 = self[i].y
+            x_2 = self[j].x
+            y_2 = self[j].y
+
+            area_times_2 += x_1*y_2 - x_2*y_1
+
+        return abs(area_times_2)/2

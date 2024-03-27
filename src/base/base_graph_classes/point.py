@@ -1,3 +1,6 @@
+from typing import Tuple
+
+
 class PointType:
     VERTEX = "vertex"
     INTERSECTION = "intersection"
@@ -6,6 +9,12 @@ class PointType:
 
 
 class Point():
+    '''
+    Point is represented by its coordinates.
+
+    Point can be interpreted as vector.
+    '''
+
     TYPE = PointType.UNDEFINED
     branches_points =[]
 
@@ -20,34 +29,42 @@ class Point():
         self.y = y
         self.coords = (x, y)
 
-    def __repr__(self):  
+
+    def __repr__(self) -> str:  
         return f"{self.coords}"
     
-    def __add__(self, point_2) -> tuple:
+
+    def __add__(self, point_2) -> Tuple[float, float]:
         return (self.x + point_2.x, self.y + point_2.y)
     
+
     def __getitem__(self, i:int) -> float:
         if i == 0 or i == 1:
             return self.coords[i]
         raise Exception(f"`i` must be int equal to 0 or 1, now i is {type(i)} equal to {i}.")
     
-    def __eq__(self, point_2):
+
+    def __eq__(self, point_2) -> bool:
         if self.coords == point_2.coords:
             return True 
         return False
     
-    def __neq__(self, point_2):
+
+    def __neq__(self, point_2) -> bool:
         return not self == point_2
     
+
     def __abs__(self) -> float:
         '''
         Returns the length of self in as float.
         '''
         return (self.x**2 + self.y**2)**0.5
     
-    def __hash__(self):
+
+    def __hash__(self) -> int:
         return hash(str(self))
     
+
     def to_vector(self):
         return self
     
@@ -55,6 +72,7 @@ class Point():
 
 class VertexPoint(Point):
     TYPE = PointType.VERTEX
+
 
 class IntersectionPoint(Point):
     TYPE = PointType.INTERSECTION
