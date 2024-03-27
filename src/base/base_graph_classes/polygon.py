@@ -1,5 +1,7 @@
-from edge import Edge
-from point import Point
+from base.base_graph_classes.edge import Edge
+from base.base_graph_classes.point import Point
+
+
 
 class Poly():
 

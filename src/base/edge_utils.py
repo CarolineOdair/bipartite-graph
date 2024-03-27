@@ -1,5 +1,8 @@
-from edge import Edge
 from math import acos
+
+from base.base_graph_classes.edge import Edge
+
+
 
 def inner_prod(edge_1:Edge, edge_2:Edge) -> float:
     '''

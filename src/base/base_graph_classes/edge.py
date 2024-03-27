@@ -1,10 +1,14 @@
-from point import Point
+from base.base_graph_classes.point import Point
+
+
 
 class EdgeType:
     OUTER = "outer"
     INNER = "inner"
     UNDEFINED = "undefined"
     POLYGONAL = "polygonal"
+
+
 
 class Edge():
     TYPE = EdgeType.UNDEFINED

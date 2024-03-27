@@ -3,6 +3,8 @@ class PointType:
     INTERSECTION = "intersection"
     UNDEFINED = "undefined"
 
+
+
 class Point():
     TYPE = PointType.UNDEFINED
     branches_points =[]

@@ -1,10 +1,12 @@
-import numpy as np
 import matplotlib.pyplot as plt
-from point import Point, VertexPoint, IntersectionPoint
-from edge import Edge
-from polygon import Poly
-from edge_utils import cross_prod, angle_between_edges
+import numpy as np
+
 import settings
+
+from base.base_graph_classes import Edge, Point, VertexPoint, IntersectionPoint, Poly
+from base.edge_utils import cross_prod, angle_between_edges
+
+
 
 
 class Graph():
