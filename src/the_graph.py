@@ -148,7 +148,8 @@ class Graph():
                     x_intersection = (b_1 - b_0) / (a_0 - a_1)
 
                     # checks if intersection point is between 0 and n-1, that is inside the square
-                    if x_intersection < self.NUM_OF_VERTS-1 and x_intersection > 0:
+                    eps = 10**(-5)  # computation error
+                    if x_intersection < self.NUM_OF_VERTS-1-eps and x_intersection > 0+eps:
 
                         # calculate 2nd coordinate of the intersection point
                         y_intersection = a_0 * x_intersection + b_0 
